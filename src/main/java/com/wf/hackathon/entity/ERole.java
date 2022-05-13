@@ -1,5 +1,7 @@
 package com.wf.hackathon.entity;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ERole {
   ROLE_USER("user"),
   ROLE_ADMIN("admin");
@@ -9,6 +11,8 @@ public enum ERole {
   ERole(String value){
     this.value = value;
   }
+
+  @JsonValue
   public String getValue(){
     return value;
   }

@@ -1,5 +1,6 @@
 package com.wf.hackathon.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table(name = "roles")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Role extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
