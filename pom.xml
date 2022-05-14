@@ -12,7 +12,7 @@
 	<artifactId>name-pronunciation-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>name-pronunciation-service</name>
-	<description>Demo project for Spring Boot</description>
+	<description>hackathon name-pronunciation-service</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -40,6 +40,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.microsoft.cognitiveservices.speech</groupId>
+			<artifactId>client-sdk</artifactId>
+			<version>1.21.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -58,5 +63,11 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<repositories>
+  		<repository>
+    		<id>maven-cognitiveservices-speech</id>
+    		<name>Microsoft Cognitive Services Speech Maven Repository</name>
+    		<url>https://csspeechstorage.blob.core.windows.net/maven/</url>
+  		</repository>
+	</repositories>
 </project>
