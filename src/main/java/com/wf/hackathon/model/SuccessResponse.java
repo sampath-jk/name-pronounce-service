@@ -26,7 +26,8 @@ public class SuccessResponse<T> {
         this.message = message;
     }
 
-    public SuccessResponse(T data) {
+    public SuccessResponse(String message, T data) {
+        this.message = message;
         this.data= data;
     }
 
