@@ -3,15 +3,17 @@ package com.wf.hackathon.service;
 import com.wf.hackathon.entity.ERole;
 import com.wf.hackathon.entity.Employee;
 import com.wf.hackathon.entity.Role;
+import com.wf.hackathon.model.EmployeeResponse;
 import com.wf.hackathon.model.EmployeeSignupRequest;
+import com.wf.hackathon.model.SuccessResponse;
 import com.wf.hackathon.repo.EmployeeRepo;
 import com.wf.hackathon.repo.RoleRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -68,4 +70,34 @@ public class EmployeeService {
         return roles;
     }
 
+    public EmployeeResponse getEmployee(String id) {
+        Employee employee = employeeRepo.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + id));
+
+        return buildEmployeeResponse(employee);
+    }
+
+    public List<EmployeeResponse> getAllEmployees(String name) {
+        List<EmployeeResponse> employeeResponse = new ArrayList<>();
+        List<Employee> searchEmployees = employeeRepo.findByFirstNameStartingWith(name);
+        searchEmployees.addAll(employeeRepo.findByLastNameStartingWith(name));
+        searchEmployees.forEach(emp -> {
+            employeeResponse.add(buildEmployeeResponse(emp));
+        });
+        return employeeResponse;
+    }
+
+    private EmployeeResponse buildEmployeeResponse(Employee employee) {
+        return EmployeeResponse.builder()
+                .address(employee.getAddress())
+                .employeeId(employee.getEmployeeId())
+                .city(employee.getCity())
+                .country(employee.getCountry())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .preferredName(employee.getPreferredName())
+                .telephone(employee.getTelephone())
+                .build();
+
+    }
 }
