@@ -1,4 +1,8 @@
 package com.wf.hackathon.service.ai;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.*;
 import com.microsoft.cognitiveservices.speech.*;
@@ -21,7 +25,9 @@ public class SpeechToSpeechService {
     }
 
     public String getSpeech(String audio, String country, String gender, String speed) {
-        PushAudioInputStream pushStream = AudioInputStream.createPushStream(AudioStreamFormat.getDefaultInputFormat());
+        //PushAudioInputStream pushStream = AudioInputStream.createPushStream(AudioStreamFormat.getDefaultInputFormat());
+        PushAudioInputStream pushStream = AudioInputStream.createPushStream(AudioStreamFormat.getWaveFormatPCM((long)48000,(short)16,(short)2
+        ));
         pushStream.write(Base64.getDecoder().decode(audio));
         audioConfig = AudioConfig.fromStreamInput(pushStream);
         pushStream.close();

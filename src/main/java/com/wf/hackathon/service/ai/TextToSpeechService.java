@@ -1,25 +1,13 @@
 package com.wf.hackathon.service.ai;
 
 import java.util.Base64;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
-import com.microsoft.cognitiveservices.speech.CancellationDetails;
-import com.microsoft.cognitiveservices.speech.CancellationReason;
-import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
-import com.microsoft.cognitiveservices.speech.SpeechRecognitionResult;
-import com.microsoft.cognitiveservices.speech.SpeechRecognizer;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
-import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
-import com.microsoft.cognitiveservices.speech.audio.AudioInputStream;
-import com.microsoft.cognitiveservices.speech.audio.AudioStreamFormat;
-import com.microsoft.cognitiveservices.speech.audio.PushAudioInputStream;
 
 public class TextToSpeechService {
     private SpeechConfig speechConfig;
-    private AudioConfig audioConfig;
     private SpeechSynthesizer synthesizer;
     public TextToSpeechService(){
         speechConfig=SpeechConfig.fromSubscription(Constants.SPEECH__SUBSCRIPTION__KEY, Constants.SPEECH__SERVICE__REGION);
