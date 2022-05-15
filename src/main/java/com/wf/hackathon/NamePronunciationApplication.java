@@ -15,7 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 		description = "Name Pronunciation API"
 )
 )
-@SecurityScheme(name = "NamePronunciationApi", scheme = "Bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
+@SecurityScheme(name = "NamePronunciationSecurity", scheme = "Bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER)
 @SpringBootApplication
 public class NamePronunciationApplication {
 
