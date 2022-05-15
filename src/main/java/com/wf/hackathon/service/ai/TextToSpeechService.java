@@ -48,50 +48,11 @@ public class TextToSpeechService {
     public String getSpeech(String name, String country){
         return getSpeech(name, country, null);
     }
-    public String getSpeech(String audio,String country, String gender,String speed)
-    {
-        PushAudioInputStream pushStream = AudioInputStream.createPushStream(AudioStreamFormat.getDefaultInputFormat());
-        pushStream.write(Base64.getDecoder().decode(audio));
-        audioConfig= AudioConfig.fromStreamInput(pushStream);
-        pushStream.close();
-        String sourceLang = Constants.langMap.get(country);
-        if(sourceLang==null)
-        sourceLang=Constants.langMap.get("United States");
-        speechConfig.setSpeechRecognitionLanguage(sourceLang);
-        try (SpeechRecognizer speechRecognizer = new SpeechRecognizer(speechConfig, audioConfig)) {
-            Future<SpeechRecognitionResult> task = speechRecognizer.recognizeOnceAsync();
-            try {
-                SpeechRecognitionResult speechRecognitionResult = task.get();
-                if (speechRecognitionResult.getReason() == ResultReason.RecognizedSpeech) {
-                    System.out.println("RECOGNIZED: Text=" + speechRecognitionResult.getText());
-
-                }
-                else if (speechRecognitionResult.getReason() == ResultReason.NoMatch) {
-                    System.out.println("NOMATCH: Speech could not be recognized.");
-                    return "{'Error':'NOMATCH: Speech could not be recognized.'}";
-                }
-                else if (speechRecognitionResult.getReason() == ResultReason.Canceled) {
-                    CancellationDetails cancellation = CancellationDetails.fromResult(speechRecognitionResult);
-                    System.out.println("CANCELED: Reason=" + cancellation.getReason());
-                    if (cancellation.getReason() == CancellationReason.Error) {
-                        System.out.println("CANCELED: ErrorCode=" + cancellation.getErrorCode());
-                        System.out.println("CANCELED: ErrorDetails=" + cancellation.getErrorDetails()+"");
-                        return "{'Error':'CANCELED: Reason="+cancellation.getReason()+"  "+cancellation.getErrorDetails()+"'}";
-                    }
-                }
-
-            } catch (InterruptedException | ExecutionException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return null;
-        
-    }
+    
     // public String clenseVoice(String voice){
 
     // }
     public static void main(String[] args) {
-        System.out.println(new TextToSpeechService().getSpeech(Test.AUDIO,"India","Female","x"));
+        System.out.println(new TextToSpeechService().getSpeech(Test.AUDIO,"India","Female"));
     }
 }
