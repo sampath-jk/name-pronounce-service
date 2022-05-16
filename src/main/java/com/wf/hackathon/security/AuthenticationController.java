@@ -3,6 +3,9 @@ package com.wf.hackathon.security;
 import com.wf.hackathon.model.AuthenticationResponse;
 import com.wf.hackathon.model.LoginRequest;
 import com.wf.hackathon.model.SuccessResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,14 +30,15 @@ public class AuthenticationController {
         this.jwtTokenUtil = jwtTokenUtil;
         this.userDetailsService = userDetailsService;
     }
-
+    @Operation(summary = "Authenticate", description = "Provides User Authentication and Bearer token generation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User authenticated successful") })
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<SuccessResponse> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUserName(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
-
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         AuthenticationResponse authenticationResponse = AuthenticationResponse.builder().employeeId(authenticationRequest.getUserName()).token(token).build();
