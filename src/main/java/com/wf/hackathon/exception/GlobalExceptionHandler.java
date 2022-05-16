@@ -1,8 +1,6 @@
 package com.wf.hackathon.exception;
 
-import com.wf.hackathon.exception.NamePronounceException;
 import com.wf.hackathon.model.ErrorResponse;
-import com.wf.hackathon.model.SuccessResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

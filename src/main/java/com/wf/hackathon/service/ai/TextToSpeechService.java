@@ -51,10 +51,4 @@ public class TextToSpeechService {
         return getSpeech(name, country, null, null);
     }
 
-    // public String clenseVoice(String voice){
-
-    // }
-    public static void main(String[] args) {
-        System.out.println(new TextToSpeechService().getSpeech("Jagadeesh", "Pakistan", "Male", null));
-    }
 }

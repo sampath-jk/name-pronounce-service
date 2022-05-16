@@ -1,15 +1,17 @@
 package com.wf.hackathon.controller;
 
+import com.azure.storage.blob.specialized.BlobAsyncClientBase;
+import com.azure.storage.blob.specialized.BlobClientBase;
 import com.wf.hackathon.model.CustomPronounceRequest;
+import com.wf.hackathon.model.EmployeeResponse;
 import com.wf.hackathon.model.PronounceRequest;
 import com.wf.hackathon.model.SuccessResponse;
 import com.wf.hackathon.service.NamePronounceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -29,23 +31,20 @@ public class NamePronounceController {
 
     @PostMapping("/customPronounce")
     public ResponseEntity<SuccessResponse> customPronounce(@RequestBody CustomPronounceRequest request) {
-        Map<String, String> data = namePronounceService.customPronounceName(request);
+        Map<String, String> data = namePronounceService.customPronounceNameTest(request);
         return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
     }
-    @PostMapping("/savePronounciation")
-    public ResponseEntity<SuccessResponse> savePronunciation() {
-        namePronounceService.savePronunciation(employeeId, audio);
-        return new ResponseEntity(new SuccessResponse("Success", "Hello"), HttpStatus.OK);
-    }
-    @PostMapping("/resetPronounciation")
-    public ResponseEntity<SuccessResponse> resetPronunciation() {
-        namePronounceService.resetPronunciation(employeeId);
-        return new ResponseEntity(new SuccessResponse("Success", "Hello"), HttpStatus.OK);
-    }
-    @GetMapping("/getEmployee/{id}")
-    public ResponseEntity<SuccessResponse> getEmployee(@PathVariable String id) {
-        EmployeeResponse employee = employeeService.getEmployee(id);
-        return new ResponseEntity(new SuccessResponse( "Success", employee), HttpStatus.OK);
+
+    @GetMapping("/resetPronunciation/{employeeId}")
+    public ResponseEntity<SuccessResponse> resetPronunciation(@PathVariable String employeeId) {
+        Map<String, String> data = namePronounceService.resetPronunciation(employeeId);
+        return new ResponseEntity(new SuccessResponse( "Success", data), HttpStatus.OK);
 
     }
+    @PostMapping("/savePronunciation")
+    public ResponseEntity<SuccessResponse> savePronunciation(@RequestBody CustomPronounceRequest request) {
+        namePronounceService.customPronounceName(request);
+        return new ResponseEntity(new SuccessResponse("Success", "Hello"), HttpStatus.OK);
+    }
+
 }
