@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,8 @@ import java.util.List;
 @RequestMapping("/user")
 public class EmployeeController {
 
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+
     private EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
@@ -31,6 +35,7 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "General greeting") })
     @GetMapping("/hello")
     public ResponseEntity<SuccessResponse> hello() {
+        logger.debug("Entered hello debug");
         return new ResponseEntity(new SuccessResponse(200, "Success", "Hello"), HttpStatus.OK);
 
     }
@@ -58,7 +63,14 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "Employees matching requested name") })
     @GetMapping("/employeeSearch/{name}")
     public ResponseEntity<SuccessResponse> employeeSearch(@PathVariable String name) {
-        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(name);
+        List<EmployeeResponse> searchResults = employeeService.searchEmployees(name);
+        return new ResponseEntity(new SuccessResponse( "Success", searchResults), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/getAllEmployees")
+    public ResponseEntity<SuccessResponse> getAllEmployees() {
+        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees();
         return new ResponseEntity(new SuccessResponse( "Success", allEmployees), HttpStatus.OK);
 
     }

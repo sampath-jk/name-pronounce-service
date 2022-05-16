@@ -47,7 +47,6 @@ public class TextToSpeechService {
         }
         return Base64.getEncoder().encodeToString(result.getAudioData());
     }
-
     public String getSpeech(String name, String country) {
         return getSpeech(name, country, null, null);
     }

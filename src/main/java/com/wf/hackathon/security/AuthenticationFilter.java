@@ -1,5 +1,6 @@
 package com.wf.hackathon.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,6 +38,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
+                verifyAdminRole(jwtToken, request.getRequestURI());
                 username = jwtTokenUtil.getUsernameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
                 System.out.println("Unable to get JWT Token");
@@ -67,5 +69,13 @@ public class AuthenticationFilter extends OncePerRequestFilter {
             }
         }
         chain.doFilter(request, response);
+    }
+
+    private void verifyAdminRole(String jwtToken, String requestUri) {
+        if (requestUri.contains("/admin/")) {
+            Claims allClaimsFromToken = jwtTokenUtil.getAllClaimsFromToken(jwtToken);
+//            allClaimsFromToken.
+        }
+
     }
 }
