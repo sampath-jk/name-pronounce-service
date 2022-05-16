@@ -1,5 +1,6 @@
 package com.wf.hackathon.controller;
 
+import com.wf.hackathon.model.CustomPronounceRequest;
 import com.wf.hackathon.model.PronounceRequest;
 import com.wf.hackathon.model.SuccessResponse;
 import com.wf.hackathon.service.NamePronounceService;
@@ -27,7 +28,8 @@ public class NamePronounceController {
     }
 
     @PostMapping("/customPronounce")
-    public ResponseEntity<SuccessResponse> customPronounce() {
-        return new ResponseEntity(new SuccessResponse("Success", "Hello"), HttpStatus.OK);
+    public ResponseEntity<SuccessResponse> customPronounce(@RequestBody CustomPronounceRequest request) {
+        Map<String, String> data = namePronounceService.customPronounceName(request);
+        return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
     }
 }
