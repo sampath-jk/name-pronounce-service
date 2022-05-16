@@ -38,13 +38,16 @@ public class NamePronounceService {
                
                 audio = service.getSpeech(request.getName(), request.getCountry());
                 azureStorageService.uploadAudio(audio, request.getEmployeeId());  
-                //TO-DO update audio_found_flag to "Y"      
+                employee.setAudioFoundFlag("Y");
+                employeeRepo.save(employee);
             }    
         }
         else if(request.getName().isEmpty() && !request.getPreferredName().equals(employee.getPreferredName())){
             audio = service.getSpeech(request.getName(), request.getCountry());
             azureStorageService.uploadAudio(audio, request.getEmployeeId());
-            //TO-DO update employee prefered name and audio_found_flag to "Y" in db.        
+            employee.setPreferredName(request.getPreferredName());
+            employee.setAudioFoundFlag("Y");
+            employeeRepo.save(employee);
         }
         else if(request.getName().isEmpty() && request.getPreferredName().equals(employee.getPreferredName())){
             audio=azureStorageService.readAudioFile(request.getEmployeeId());        
@@ -63,21 +66,26 @@ public class NamePronounceService {
     }
     public Map<String, String> customPronounceName(CustomPronounceRequest request) {
         Map<String, String> response = new HashMap<>();
+        Employee employee = employeeRepo.findById(request.getEmployeeId())
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmployeeId()));
         azureStorageService.uploadAudio(request.getAudio(), request.getEmployeeId());
-        //TO-DO update audio_found_flag to "Y"
+        employee.setAudioFoundFlag("Y");
+        employeeRepo.save(employee);
         response.put("employeeId", request.getEmployeeId());
         response.put("status","success");
         return response;
     }
     public Map<String, String> resetPronunciation(CustomPronounceRequest request) {
         Map<String, String> response = new HashMap<>();
+        Employee employee = employeeRepo.findById(request.getEmployeeId())
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmployeeId()));
+        employee.setPreferredName(null);
+        employee.setAudioFoundFlag("N");
+        employeeRepo.save(employee);
         //TO-DO delete audio from azure store
-        //TO-DO update audio_found_flag to "N"
-        //TO-DO update prefered name to null in db
         
         response.put("employeeId", request.getEmployeeId());
         response.put("status","success");
         return response;
     }
-
 }
