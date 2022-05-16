@@ -1,6 +1,9 @@
 package com.wf.hackathon.security;
 
+import com.wf.hackathon.model.AuthenticationResponse;
 import com.wf.hackathon.model.LoginRequest;
+import com.wf.hackathon.model.SuccessResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,7 +29,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
+    public ResponseEntity<SuccessResponse> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest) throws Exception {
 
         authenticate(authenticationRequest.getUserName(), authenticationRequest.getPassword());
 
@@ -34,7 +37,9 @@ public class AuthenticationController {
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(token);
+        AuthenticationResponse authenticationResponse = AuthenticationResponse.builder().employeeId(authenticationRequest.getUserName()).token(token).build();
+
+        return new ResponseEntity(new SuccessResponse("Success", authenticationResponse), HttpStatus.OK);
     }
 
     private void authenticate(String username, String password) throws Exception {

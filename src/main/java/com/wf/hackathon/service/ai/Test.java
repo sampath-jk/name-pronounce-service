@@ -15,7 +15,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Test {
 
-    
+    public static final String AUDIO="audio";
     public byte[] readStream() throws IOException
     {
         File file = new File("D:\\Hackathon\\workspace\\name-pronounce-service\\src\\main\\java\\com\\wf\\hackathon\\service\\ai\\time.wav");
