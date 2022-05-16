@@ -42,7 +42,7 @@ public class SpeechToSpeechService {
             }
             if (speechRecognitionResult.getReason() == ResultReason.TranslatedSpeech) {
                 System.out.println("RECOGNIZED: Text=" + speechRecognitionResult.getText());
-                return (new TextToSpeechService().getSpeech(speechRecognitionResult.getText(), country, gender));
+                return (new TextToSpeechService().getSpeech(speechRecognitionResult.getText(), country, gender,speed));
             } else if (speechRecognitionResult.getReason() == ResultReason.NoMatch) {
                 System.out.println("NOMATCH: Speech could not be recognized.");
                 return "{'Error':'NOMATCH: Speech could not be recognized.'}";
@@ -64,7 +64,7 @@ public class SpeechToSpeechService {
 
     public static void main(String[] args) {
         SpeechToSpeechService service = new SpeechToSpeechService();
-        System.out.println(service.getSpeech(Test.AUDIO, "India", "Female", "x"));
+        System.out.println(service.getSpeech(Test.AUDIO, "India", "Female", "slow"));
     }
 
 }
