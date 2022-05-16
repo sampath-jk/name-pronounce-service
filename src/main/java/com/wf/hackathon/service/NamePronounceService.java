@@ -27,25 +27,56 @@ public class NamePronounceService {
 
     public Map<String, String> pronounceName(PronounceRequest request) {
         Map<String, String> response = new HashMap<>();
+        String audio=null;
+        TextToSpeechService service= new TextToSpeechService();;
         Employee employee = employeeRepo.findById(request.getEmployeeId())
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmployeeId()));
-        TextToSpeechService service = new TextToSpeechService();
-        String audio = service.getSpeech(request.getName(), request.getCountry());
-        azureStorageService.uploadAudio(audio, request.getEmployeeId() + "_defaultAudio");
+        if(!request.getName().isEmpty()){
+            if(employee.getAudioFoundFlag().equalsIgnoreCase("Y"))
+            audio=azureStorageService.readAudioFile(request.getEmployeeId());
+            else{
+               
+                audio = service.getSpeech(request.getName(), request.getCountry());
+                azureStorageService.uploadAudio(audio, request.getEmployeeId());  
+                //TO-DO update audio_found_flag to "Y"      
+            }    
+        }
+        else if(request.getName().isEmpty() && !request.getPreferredName().equals(employee.getPreferredName())){
+            audio = service.getSpeech(request.getName(), request.getCountry());
+            azureStorageService.uploadAudio(audio, request.getEmployeeId());
+            //TO-DO update employee prefered name and audio_found_flag to "Y" in db.        
+        }
+        else if(request.getName().isEmpty() && request.getPreferredName().equals(employee.getPreferredName())){
+            audio=azureStorageService.readAudioFile(request.getEmployeeId());        
+        }
         response.put("employeeId", request.getEmployeeId());
         response.put("audio", audio);
         return response;
     }
-
-    public Map<String, String> customPronounceName(CustomPronounceRequest request) {
+    public Map<String, String> customPronounceNameTest(CustomPronounceRequest request) {
         Map<String, String> response = new HashMap<>();
         SpeechToSpeechService service = new SpeechToSpeechService();
         String audio = service.getSpeech(request.getAudio(), request.getCountry(), request.getGender(), request.getSpeed());
-        Employee employee = employeeRepo.findById(request.getEmployeeId())
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmployeeId()));
-        azureStorageService.uploadAudio(audio, request.getEmployeeId() + "_customAudio");
         response.put("employeeId", request.getEmployeeId());
         response.put("audio", audio);
+        return response;
+    }
+    public Map<String, String> customPronounceName(CustomPronounceRequest request) {
+        Map<String, String> response = new HashMap<>();
+        azureStorageService.uploadAudio(request.getAudio(), request.getEmployeeId());
+        //TO-DO update audio_found_flag to "Y"
+        response.put("employeeId", request.getEmployeeId());
+        response.put("status","success");
+        return response;
+    }
+    public Map<String, String> resetPronunciation(CustomPronounceRequest request) {
+        Map<String, String> response = new HashMap<>();
+        //TO-DO delete audio from azure store
+        //TO-DO update audio_found_flag to "N"
+        //TO-DO update prefered name to null in db
+        
+        response.put("employeeId", request.getEmployeeId());
+        response.put("status","success");
         return response;
     }
 
