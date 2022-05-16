@@ -17,9 +17,11 @@ public class NamePronounceService {
 
     private EmployeeRepo employeeRepo;
 
+    private AzureStorageService azureStorageService;
 
-    public NamePronounceService(EmployeeRepo employeeRepo) {
+    public NamePronounceService(EmployeeRepo employeeRepo, AzureStorageService azureStorageService) {
         this.employeeRepo = employeeRepo;
+        this.azureStorageService = azureStorageService;
     }
 
 
@@ -29,10 +31,7 @@ public class NamePronounceService {
         String audio = service.getSpeech(request.getName(), request.getCountry());
         Employee employee = employeeRepo.findById(request.getEmployeeId())
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmployeeId()));
-        EmployeeAudio employeeAudio = new EmployeeAudio();
-        employeeAudio.setDefaultAudio(audio.getBytes(StandardCharsets.UTF_8));
-        employee.setEmployeeAudio(employeeAudio);
-        employeeRepo.save(employee);
+        azureStorageService.writeBlobFile(audio, request.getEmployeeId() + "_defaultAudio");
         response.put("employeeId", request.getEmployeeId());
         response.put("audio", audio);
         return response;

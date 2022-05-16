@@ -77,13 +77,19 @@ public class EmployeeService {
         return buildEmployeeResponse(employee);
     }
 
-    public List<EmployeeResponse> getAllEmployees(String name) {
+    public List<EmployeeResponse> searchEmployees(String name) {
         List<EmployeeResponse> employeeResponse = new ArrayList<>();
         List<Employee> searchEmployees = employeeRepo.findByFirstNameStartingWith(name);
         searchEmployees.addAll(employeeRepo.findByLastNameStartingWith(name));
-        searchEmployees.forEach(emp -> {
-            employeeResponse.add(buildEmployeeResponse(emp));
-        });
+        searchEmployees.forEach(emp -> employeeResponse.add(buildEmployeeResponse(emp)));
+        return employeeResponse;
+    }
+
+    public List<EmployeeResponse> getAllEmployees() {
+        List<EmployeeResponse> employeeResponse = new ArrayList<>();
+        //TODO: pagination, sorting
+        List<Employee> all = employeeRepo.findAll();
+        all.forEach(emp -> employeeResponse.add(buildEmployeeResponse(emp)));
         return employeeResponse;
     }
 

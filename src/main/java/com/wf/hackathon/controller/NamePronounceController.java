@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 public class NamePronounceController {
 
@@ -20,12 +22,12 @@ public class NamePronounceController {
 
     @PostMapping("/pronounceName")
     public ResponseEntity<SuccessResponse> pronounceName(@RequestBody PronounceRequest request) {
-        namePronounceService.pronounceName(request);
-        return new ResponseEntity(new SuccessResponse(200, "Success", "Hello"), HttpStatus.OK);
+        Map<String, String> data = namePronounceService.pronounceName(request);
+        return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
     }
 
     @PostMapping("/customPronounce")
     public ResponseEntity<SuccessResponse> customPronounce() {
-        return new ResponseEntity(new SuccessResponse(200, "Success", "Hello"), HttpStatus.OK);
+        return new ResponseEntity(new SuccessResponse("Success", "Hello"), HttpStatus.OK);
     }
 }
