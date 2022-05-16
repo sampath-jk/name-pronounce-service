@@ -6,6 +6,8 @@ import com.wf.hackathon.model.PronounceRequest;
 import com.wf.hackathon.repo.EmployeeRepo;
 import com.wf.hackathon.service.ai.SpeechToSpeechService;
 import com.wf.hackathon.service.ai.TextToSpeechService;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,7 @@ public class NamePronounceService {
         TextToSpeechService service= new TextToSpeechService();;
         Employee employee = employeeRepo.findById(request.getEmployeeId())
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmployeeId()));
-        if(!request.getName().isEmpty()){
+        if(StringUtils.isEmpty(request.getName())){
             if(employee.getAudioFoundFlag().equalsIgnoreCase("Y"))
             audio=azureStorageService.readAudioFile(request.getEmployeeId());
             else{
@@ -42,14 +44,14 @@ public class NamePronounceService {
                 employeeRepo.save(employee);
             }    
         }
-        else if(request.getName().isEmpty() && !request.getPreferredName().equals(employee.getPreferredName())){
+        else if(StringUtils.isEmpty(request.getName()) && !request.getPreferredName().equals(employee.getPreferredName())){
             audio = service.getSpeech(request.getName(), request.getCountry());
             azureStorageService.uploadAudio(audio, request.getEmployeeId());
             employee.setPreferredName(request.getPreferredName());
             employee.setAudioFoundFlag("Y");
             employeeRepo.save(employee);
         }
-        else if(request.getName().isEmpty() && request.getPreferredName().equals(employee.getPreferredName())){
+        else if(StringUtils.isEmpty(request.getName()) && request.getPreferredName().equals(employee.getPreferredName())){
             audio=azureStorageService.readAudioFile(request.getEmployeeId());        
         }
         response.put("employeeId", request.getEmployeeId());
@@ -75,16 +77,16 @@ public class NamePronounceService {
         response.put("status","success");
         return response;
     }
-    public Map<String, String> resetPronunciation(CustomPronounceRequest request) {
+    public Map<String, String> resetPronunciation(String employeeId) {
         Map<String, String> response = new HashMap<>();
-        Employee employee = employeeRepo.findById(request.getEmployeeId())
-                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmployeeId()));
+        Employee employee = employeeRepo.findById(employeeId)
+                .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + employeeId));
         employee.setPreferredName(null);
         employee.setAudioFoundFlag("N");
         employeeRepo.save(employee);
         //TO-DO delete audio from azure store
         
-        response.put("employeeId", request.getEmployeeId());
+        response.put("employeeId", employeeId);
         response.put("status","success");
         return response;
     }

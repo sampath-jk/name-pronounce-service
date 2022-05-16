@@ -32,4 +32,20 @@ public class NamePronounceController {
         Map<String, String> data = namePronounceService.customPronounceName(request);
         return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
     }
+    @PostMapping("/savePronounciation")
+    public ResponseEntity<SuccessResponse> savePronunciation() {
+        namePronounceService.savePronunciation(employeeId, audio);
+        return new ResponseEntity(new SuccessResponse("Success", "Hello"), HttpStatus.OK);
+    }
+    @PostMapping("/resetPronounciation")
+    public ResponseEntity<SuccessResponse> resetPronunciation() {
+        namePronounceService.resetPronunciation(employeeId);
+        return new ResponseEntity(new SuccessResponse("Success", "Hello"), HttpStatus.OK);
+    }
+    @GetMapping("/getEmployee/{id}")
+    public ResponseEntity<SuccessResponse> getEmployee(@PathVariable String id) {
+        EmployeeResponse employee = employeeService.getEmployee(id);
+        return new ResponseEntity(new SuccessResponse( "Success", employee), HttpStatus.OK);
+
+    }
 }

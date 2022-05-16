@@ -68,10 +68,11 @@ public class EmployeeController {
 
     }
 
-    @GetMapping("/getAllEmployees")
-    public ResponseEntity<SuccessResponse> getAllEmployees() {
-        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees();
-        return new ResponseEntity(new SuccessResponse( "Success", allEmployees), HttpStatus.OK);
+    @GetMapping("/resetPronunciation/{employeeId}")
+    public ResponseEntity<SuccessResponse> resetPronunciation(@PathVariable String employeeId) {
+        List<EmployeeResponse> allEmployees = employeeService.resetPronunciation(employeeId);
+        return new ResponseEntity(new SuccessResponse( "Success",null), HttpStatus.OK);
 
     }
+    
 }
