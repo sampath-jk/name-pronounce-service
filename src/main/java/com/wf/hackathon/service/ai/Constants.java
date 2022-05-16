@@ -9,7 +9,11 @@ static final String SPEECH__SUBSCRIPTION__KEY = "1140d6c40d6a4f32bfa09d9270d1c50
 static final String SPEECH__SERVICE__REGION = "eastus";
 static final String SPEECH_SOURCE_LANG="en-US";
 static final String SPEECH_TARGET_LANG="en";
-static final String FEMALE="FEMALE";
+static final String FEMALE="Female";
+static final String SPEED_SLOW="slow";
+static final String SPEED_NORMAL="normal";
+static final String SPEED_FAST="fast";
+
 static final Map<String,String> femaleVoiceMap= new HashMap<String,String>();
 static final Map<String,String> maleVoiceMap= new HashMap<String,String>();
 static final Map<String,String> langMap= new HashMap<String,String>(); 
