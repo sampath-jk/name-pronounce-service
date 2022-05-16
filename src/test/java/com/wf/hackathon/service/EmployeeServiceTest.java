@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,8 +33,6 @@ class EmployeeServiceTest {
     @Mock
     private RoleRepo roleRepo;
 
-
-
     @Test
     void testGetEmployee_Success() {
         Mockito.when(employeeRepo.findById(Mockito.anyString())).thenReturn(buildEmployee());
@@ -46,13 +46,22 @@ class EmployeeServiceTest {
         Assertions.assertThrows(UsernameNotFoundException.class, () -> employeeService.getEmployee("id"));
     }
 
-    /*@Test
+    @Test
     void searchEmployees() {
+        Employee employee = buildEmployee().get();
+        Mockito.when(employeeRepo.findByFirstNameStartingWith(Mockito.anyString())).thenReturn(Arrays.asList(employee));
+        Mockito.when(employeeRepo.findByLastNameStartingWith(Mockito.anyString())).thenReturn(Arrays.asList(employee));
+        List<EmployeeResponse> employeeResponses = employeeService.searchEmployees("dur");
+        Assertions.assertNotNull(employeeResponses);
     }
 
     @Test
     void getAllEmployees() {
-    }*/
+        Employee employee = buildEmployee().get();
+        Mockito.when(employeeRepo.findAll()).thenReturn(Arrays.asList(employee));
+        List<EmployeeResponse> employeeResponses = employeeService.getAllEmployees();
+        Assertions.assertNotNull(employeeResponses);
+    }
 
     private Optional<Employee> buildEmployee() {
         return Optional.ofNullable(Employee.builder()

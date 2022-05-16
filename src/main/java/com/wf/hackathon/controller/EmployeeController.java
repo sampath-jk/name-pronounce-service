@@ -67,4 +67,11 @@ public class EmployeeController {
         return new ResponseEntity(new SuccessResponse( "Success", searchResults), HttpStatus.OK);
 
     }
+
+    @GetMapping("/getAllEmployees")
+    public ResponseEntity<SuccessResponse> getAllEmployees() {
+        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees();
+        return new ResponseEntity(new SuccessResponse( "Success", allEmployees), HttpStatus.OK);
+
+    }
 }
