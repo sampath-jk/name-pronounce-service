@@ -58,6 +58,7 @@ public class NamePronounceService {
         response.put("audio", audio);
         return response;
     }
+
     public Map<String, String> customPronounceNameTest(CustomPronounceRequest request) {
         Map<String, String> response = new HashMap<>();
         SpeechToSpeechService service = new SpeechToSpeechService();
@@ -66,6 +67,7 @@ public class NamePronounceService {
         response.put("audio", audio);
         return response;
     }
+
     public Map<String, String> customPronounceName(CustomPronounceRequest request) {
         Map<String, String> response = new HashMap<>();
         Employee employee = employeeRepo.findById(request.getEmployeeId())
@@ -77,6 +79,7 @@ public class NamePronounceService {
         response.put("status","success");
         return response;
     }
+
     public Map<String, String> resetPronunciation(String employeeId) {
         Map<String, String> response = new HashMap<>();
         Employee employee = employeeRepo.findById(employeeId)
@@ -84,8 +87,6 @@ public class NamePronounceService {
         employee.setPreferredName(null);
         employee.setAudioFoundFlag("N");
         employeeRepo.save(employee);
-        //TO-DO delete audio from azure store
-        
         response.put("employeeId", employeeId);
         response.put("status","success");
         return response;
