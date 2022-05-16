@@ -58,7 +58,14 @@ public class EmployeeController {
             @ApiResponse(responseCode = "200", description = "Employees matching requested name") })
     @GetMapping("/employeeSearch/{name}")
     public ResponseEntity<SuccessResponse> employeeSearch(@PathVariable String name) {
-        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees(name);
+        List<EmployeeResponse> searchResults = employeeService.searchEmployees(name);
+        return new ResponseEntity(new SuccessResponse( "Success", searchResults), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/getAllEmployees")
+    public ResponseEntity<SuccessResponse> getAllEmployees() {
+        List<EmployeeResponse> allEmployees = employeeService.getAllEmployees();
         return new ResponseEntity(new SuccessResponse( "Success", allEmployees), HttpStatus.OK);
 
     }

@@ -34,13 +34,13 @@ public class TextToSpeechService {
         return Base64.getEncoder().encodeToString(result.getAudioData());
     }
     public String getSpeech(String name, String country){
-        return getSpeech(name, country, null);
+        return getSpeech(name, country, Constants.FEMALE);
     }
     
     // public String clenseVoice(String voice){
 
     // }
     public static void main(String[] args) {
-        System.out.println(new TextToSpeechService().getSpeech(Test.AUDIO,"India","Female"));
+//        System.out.println(new TextToSpeechService().getSpeech(Test.AUDIO,"India","Female"));
     }
 }
