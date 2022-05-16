@@ -5,7 +5,6 @@ import com.wf.hackathon.entity.Employee;
 import com.wf.hackathon.entity.Role;
 import com.wf.hackathon.model.EmployeeResponse;
 import com.wf.hackathon.model.EmployeeSignupRequest;
-import com.wf.hackathon.model.SuccessResponse;
 import com.wf.hackathon.repo.EmployeeRepo;
 import com.wf.hackathon.repo.RoleRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -60,12 +62,6 @@ public class EmployeeService {
             Role adminRole = roleRepo.findByName(role)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(adminRole);
-
-            /*Role r = new Role();
-            r.setName(role);
-            r.setIsActive(true);
-            r.setRoleDescription(role.getValue());
-            roles.add(r)*/;
         });
         return roles;
     }
