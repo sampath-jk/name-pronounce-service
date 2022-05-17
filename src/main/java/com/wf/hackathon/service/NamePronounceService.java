@@ -99,7 +99,7 @@ public class NamePronounceService {
         log.debug("Before Calling speech to speech");
         try{
         SpeechToSpeechService service = new SpeechToSpeechService();
-        String audio = service.getSpeech(request.getAudio(), request.getCountry(), request.getGender(),
+        String audio = service.getSpeech(trimAudio(request.getAudio()), request.getCountry(), request.getGender(),
                 request.getSpeed());
                 log.debug("Response Audio:"+audio);        
         response.put("employeeId", request.getEmployeeId());
@@ -117,7 +117,7 @@ public class NamePronounceService {
         Employee employee = employeeRepo.findById(request.getEmployeeId())
                 .orElseThrow(() -> new UsernameNotFoundException(
                         "User Not Found with username: " + request.getEmployeeId()));
-        azureStorageService.uploadAudio(request.getAudio(), request.getEmployeeId());
+        azureStorageService.uploadAudio(trimAudio(request.getAudio()), request.getEmployeeId());
         employee.setAudioFoundFlag("Y");
         employeeRepo.save(employee);
         response.put("employeeId", request.getEmployeeId());
@@ -135,4 +135,8 @@ public class NamePronounceService {
         response.put("status", "success");
         return response;
     }
+    private String trimAudio(String audio){
+        return audio.substring("data:audio/wav;base64,".length()-1);
+    
+
 }
