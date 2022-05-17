@@ -17,7 +17,7 @@ public class TextToSpeechService {
 
     public String getSpeech(String name, String country, String gender, String speed) {
         String targetVoice = null;
-        if (gender.equals(Constants.FEMALE) || gender == null) {
+        if (gender == null || gender.equals(Constants.FEMALE) ) {
             targetVoice = Constants.femaleVoiceMap.get(country);
             if (targetVoice == null)
                 targetVoice = Constants.femaleVoiceMap.get("United States");
