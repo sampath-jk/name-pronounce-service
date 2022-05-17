@@ -11,15 +11,19 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class NamePronounceService {
 
     private EmployeeRepo employeeRepo;
 
     private AzureStorageService azureStorageService;
+    
 
     public NamePronounceService(EmployeeRepo employeeRepo, AzureStorageService azureStorageService) {
         this.employeeRepo = employeeRepo;
@@ -28,18 +32,22 @@ public class NamePronounceService {
 
 
     public Map<String, String> pronounceName(PronounceRequest request) {
+        log.debug("Entered pronounceName");
         Map<String, String> response = new HashMap<>();
         String audio=null;
-        TextToSpeechService service= new TextToSpeechService();;
+        TextToSpeechService service= new TextToSpeechService();
+        log.debug("Received response from AI service");
         Employee employee = employeeRepo.findById(request.getEmployeeId())
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + request.getEmployeeId()));
+        log.debug("Employe information received");
         if(StringUtils.isEmpty(request.getName())){
             if(employee.getAudioFoundFlag().equalsIgnoreCase("Y"))
             audio=azureStorageService.readAudioFile(request.getEmployeeId());
             else{
                
                 audio = service.getSpeech(request.getName(), request.getCountry());
-                azureStorageService.uploadAudio(audio, request.getEmployeeId());  
+                azureStorageService.uploadAudio(audio, request.getEmployeeId()); 
+                log.debug("Voice stored in azure"); 
                 employee.setAudioFoundFlag("Y");
                 employeeRepo.save(employee);
             }    
@@ -50,9 +58,11 @@ public class NamePronounceService {
             employee.setPreferredName(request.getPreferredName());
             employee.setAudioFoundFlag("Y");
             employeeRepo.save(employee);
+            log.debug("Employe information saved");
         }
         else if(StringUtils.isEmpty(request.getName()) && request.getPreferredName().equals(employee.getPreferredName())){
-            audio=azureStorageService.readAudioFile(request.getEmployeeId());        
+            audio=azureStorageService.readAudioFile(request.getEmployeeId());
+            log.debug("Audio received from Azure store");        
         }
         response.put("employeeId", request.getEmployeeId());
         response.put("audio", audio);
