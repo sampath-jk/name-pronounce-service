@@ -100,6 +100,7 @@ public class EmployeeService {
                 .lastName(employee.getLastName())
                 .preferredName(employee.getPreferredName())
                 .telephone(employee.getTelephone())
+                .email(employee.getEmail())
                 .roles(roleNames)
                 .build();
 
