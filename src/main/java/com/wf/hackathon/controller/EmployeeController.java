@@ -30,16 +30,6 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @Operation(method = "GET", summary = "Greet", description = "A generic greeting service")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "General greeting") })
-    @GetMapping("/hello")
-    public ResponseEntity<SuccessResponse> hello() {
-        logger.debug("Entered hello debug");
-        return new ResponseEntity(new SuccessResponse(200, "Success", "Hello"), HttpStatus.OK);
-
-    }
-
     @Operation(summary = "register", description = "Provides User registration")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Registration successful") })
@@ -67,7 +57,9 @@ public class EmployeeController {
         return new ResponseEntity(new SuccessResponse( "Success", searchResults), HttpStatus.OK);
 
     }
-
+    @Operation(summary = "Get all employees", description = "Provides details of all employees")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Employee information provided successfully") })
     @GetMapping("/getAllEmployees")
     public ResponseEntity<SuccessResponse> getAllEmployees() {
         List<EmployeeResponse> allEmployees = employeeService.getAllEmployees();
