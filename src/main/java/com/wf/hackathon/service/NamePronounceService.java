@@ -39,17 +39,24 @@ public class NamePronounceService {
             Employee employee = employeeRepo.findById(request.getEmployeeId())
                     .orElseThrow(() -> new UsernameNotFoundException(
                             "User Not Found with username: " + request.getEmployeeId()));
-            log.debug("Employe information received with empid:",employee);
-            if (!StringUtils.isEmpty(request.getName())) {
-                log.debug("Name is not null:"+request.getName());
-                if (employee.getAudioFoundFlag()!=null && employee.getAudioFoundFlag().equalsIgnoreCase("Y")) {
+            log.debug("Employe information received with empid:", employee);
+            if (StringUtils.isEmpty(request.getName()) && StringUtils.isEmpty(request.getPreferredName())) {
+                audio = service.getSpeech(employee.getFirstName() + " " + employee.getLastName(), request.getCountry());
+                azureStorageService.uploadAudio(audio, request.getEmployeeId());
+                employee.setPreferredName(null);
+                employee.setAudioFoundFlag("Y");
+                employeeRepo.save(employee);
+                log.debug("Employe information saved");
+            } else if (!StringUtils.isEmpty(request.getName())) {
+                log.debug("Name is not null:" + request.getName());
+                if (employee.getAudioFoundFlag() != null && employee.getAudioFoundFlag().equalsIgnoreCase("Y")) {
                     log.debug("Audio flag Y and before reading audio from store");
                     audio = azureStorageService.readAudioFile(request.getEmployeeId());
                     log.debug("Audio flag Y");
                 } else {
                     log.debug("Before Calling speech service");
                     audio = service.getSpeech(request.getName(), request.getCountry());
-                    log.debug("Audio:"+audio);
+                    log.debug("Audio:" + audio);
                     azureStorageService.uploadAudio(audio, request.getEmployeeId());
                     log.debug("Voice stored in azure");
                     employee.setAudioFoundFlag("Y");
@@ -64,12 +71,22 @@ public class NamePronounceService {
                 employeeRepo.save(employee);
                 log.debug("Employe information saved");
             } else if (StringUtils.isEmpty(request.getName())
+                    && request.getPreferredName().equals(employee.getPreferredName())
+                    && (employee.getAudioFoundFlag() == null || employee.getAudioFoundFlag().equalsIgnoreCase("N"))) {
+                audio = service.getSpeech(request.getName(), request.getCountry());
+                azureStorageService.uploadAudio(audio, request.getEmployeeId());
+                employee.setAudioFoundFlag("Y");
+                employeeRepo.save(employee);
+                log.debug("Employe information saved with AI data");
+            }
+
+            else if (StringUtils.isEmpty(request.getName())
                     && request.getPreferredName().equals(employee.getPreferredName())) {
                 audio = azureStorageService.readAudioFile(request.getEmployeeId());
                 log.debug("Audio received from Azure store");
             }
             response.put("employeeId", request.getEmployeeId());
-            response.put("audio", "data:audio/wav;base64,"+audio);
+            response.put("audio", "data:audio/wav;base64," + audio);
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage());
             e.printStackTrace();
@@ -83,7 +100,7 @@ public class NamePronounceService {
         String audio = service.getSpeech(request.getAudio(), request.getCountry(), request.getGender(),
                 request.getSpeed());
         response.put("employeeId", request.getEmployeeId());
-        response.put("audio", "data:audio/wav;base64,"+audio);
+        response.put("audio", "data:audio/wav;base64," + audio);
         return response;
     }
 
@@ -104,7 +121,6 @@ public class NamePronounceService {
         Map<String, String> response = new HashMap<>();
         Employee employee = employeeRepo.findById(employeeId)
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + employeeId));
-        employee.setPreferredName(null);
         employee.setAudioFoundFlag("N");
         employeeRepo.save(employee);
         response.put("employeeId", employeeId);
