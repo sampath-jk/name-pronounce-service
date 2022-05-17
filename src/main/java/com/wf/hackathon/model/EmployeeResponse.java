@@ -30,7 +30,7 @@ public class EmployeeResponse {
 
     private String email;
 
-    private Set<Role> roles;
+    private Set<String> roles;
 
 
 }

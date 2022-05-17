@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -87,6 +88,9 @@ public class EmployeeService {
     }
 
     private EmployeeResponse buildEmployeeResponse(Employee employee) {
+        Set<Role> roles = employee.getRoles() != null ? employee.getRoles() : Collections.<Role>emptySet();
+        Set<String> roleNames = roles.stream().map(role -> role.getName().name()).collect(Collectors.toSet());
+
         return EmployeeResponse.builder()
                 .address(employee.getAddress())
                 .employeeId(employee.getEmployeeId())
@@ -96,7 +100,7 @@ public class EmployeeService {
                 .lastName(employee.getLastName())
                 .preferredName(employee.getPreferredName())
                 .telephone(employee.getTelephone())
-                .roles(employee.getRoles()!=null?employee.getRoles(): Collections.emptySet())
+                .roles(roleNames)
                 .build();
 
     }
