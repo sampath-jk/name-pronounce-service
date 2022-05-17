@@ -38,7 +38,7 @@ public class EmployeeController {
     @PostMapping("/register")
     public ResponseEntity<SuccessResponse> register(@Valid @RequestBody EmployeeSignupRequest loginRequest) {
         employeeService.register(loginRequest);
-        return new ResponseEntity(new SuccessResponse(200, "Success", "Hello"), HttpStatus.OK);
+        return new ResponseEntity(new SuccessResponse("Success", "Registered"), HttpStatus.OK);
 
     }
     @Operation(summary = "Get employee details", description = "Provides information of a given employee by employee Id")
