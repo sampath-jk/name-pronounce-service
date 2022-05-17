@@ -53,8 +53,9 @@ public class NamePronounceController {
     @PostMapping("/customPronounce")
     public ResponseEntity<SuccessResponse> customPronounce(@RequestBody CustomPronounceRequest request) {
         log.debug("Entered customPronounce controller");
+        Map<String, String> data=null;
         try {
-            Map<String, String> data = namePronounceService.customPronounceNameTest(request);
+            data = namePronounceService.customPronounceNameTest(request);
             log.debug("audio" + data);
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage());
