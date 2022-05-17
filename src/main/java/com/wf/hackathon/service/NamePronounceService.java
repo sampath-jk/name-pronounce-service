@@ -41,7 +41,7 @@ public class NamePronounceService {
                             "User Not Found with username: " + request.getEmployeeId()));
             log.debug("Employe information received with empid:",employee);
             if (!StringUtils.isEmpty(request.getName())) {
-                log.debug("Name is not null");
+                log.debug("Name is not null:"+request.getName());
                 if (employee.getAudioFoundFlag()!=null && employee.getAudioFoundFlag().equalsIgnoreCase("Y")) {
                     log.debug("Audio flag Y and before reading audio from store");
                     audio = azureStorageService.readAudioFile(request.getEmployeeId());
