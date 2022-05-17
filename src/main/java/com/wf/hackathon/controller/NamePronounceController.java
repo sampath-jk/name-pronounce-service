@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import lombok.extern.slf4j.Slf4j;
+
 @SecurityRequirement(name = "NamePronunciationSecurity")
 @RestController
+@Slf4j
 public class NamePronounceController {
 
     private NamePronounceService namePronounceService;
@@ -28,28 +31,36 @@ public class NamePronounceController {
     public NamePronounceController(NamePronounceService namePronounceService) {
         this.namePronounceService = namePronounceService;
     }
+
     @Operation(summary = "Name pronunciation", description = "Provides employee name standard/custom pronunciation")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Employees name pronunciation received"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal error")})
+            @ApiResponse(responseCode = "500", description = "Internal error") })
     @PostMapping("/pronounceName")
     public ResponseEntity<SuccessResponse> pronounceName(@RequestBody PronounceRequest request) {
         Map<String, String> data = namePronounceService.pronounceName(request);
         return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
     }
 
-
     @Operation(summary = "Custom Name pronunciation", description = "Provides employee name recording & custom pronunciation")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Employees name pronunciation received"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal error")})
+            @ApiResponse(responseCode = "500", description = "Internal error") })
     @PostMapping("/customPronounce")
     public ResponseEntity<SuccessResponse> customPronounce(@RequestBody CustomPronounceRequest request) {
-        Map<String, String> data = namePronounceService.customPronounceNameTest(request);
+        log.debug("Entered customPronounce controller");
+        try {
+            Map<String, String> data = namePronounceService.customPronounceNameTest(request);
+            log.debug("audio" + data);
+        } catch (Exception e) {
+            log.debug(e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+
         return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
     }
 
@@ -58,11 +69,11 @@ public class NamePronounceController {
             @ApiResponse(responseCode = "200", description = "Employees name pronunciation reset successful"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal error")})
+            @ApiResponse(responseCode = "500", description = "Internal error") })
     @GetMapping("/resetPronunciation/{employeeId}")
     public ResponseEntity<SuccessResponse> resetPronunciation(@PathVariable String employeeId) {
         Map<String, String> data = namePronounceService.resetPronunciation(employeeId);
-        return new ResponseEntity(new SuccessResponse( "Success", data), HttpStatus.OK);
+        return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
 
     }
 
@@ -71,7 +82,7 @@ public class NamePronounceController {
             @ApiResponse(responseCode = "200", description = "Employees name pronunciation saved successfully"),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal error")})
+            @ApiResponse(responseCode = "500", description = "Internal error") })
     @PostMapping("/savePronunciation")
     public ResponseEntity<SuccessResponse> savePronunciation(@RequestBody CustomPronounceRequest request) {
         namePronounceService.customPronounceName(request);
