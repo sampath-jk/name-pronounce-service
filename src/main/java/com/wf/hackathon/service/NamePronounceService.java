@@ -69,7 +69,7 @@ public class NamePronounceService {
                 log.debug("Audio received from Azure store");
             }
             response.put("employeeId", request.getEmployeeId());
-            response.put("audio", audio);
+            response.put("audio", "data:audio/wav;base64,"+audio);
         } catch (Exception e) {
             log.debug(e.getLocalizedMessage());
             e.printStackTrace();
@@ -83,7 +83,7 @@ public class NamePronounceService {
         String audio = service.getSpeech(request.getAudio(), request.getCountry(), request.getGender(),
                 request.getSpeed());
         response.put("employeeId", request.getEmployeeId());
-        response.put("audio", audio);
+        response.put("audio", "data:audio/wav;base64,"+audio);
         return response;
     }
 
