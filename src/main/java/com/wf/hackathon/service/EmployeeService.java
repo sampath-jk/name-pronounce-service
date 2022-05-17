@@ -12,10 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -99,6 +96,7 @@ public class EmployeeService {
                 .lastName(employee.getLastName())
                 .preferredName(employee.getPreferredName())
                 .telephone(employee.getTelephone())
+                .roles(employee.getRoles()!=null?employee.getRoles(): Collections.emptySet())
                 .build();
 
     }

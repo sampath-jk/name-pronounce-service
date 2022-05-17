@@ -51,10 +51,8 @@ public class Employee extends BaseEntity {
     @Column(name = "audio_found_flag")
     private String audioFoundFlag;
 
-    
-
-    @Column(name = "audio_flag")
-    private boolean audioFlag;
+//    @Column(name = "audio_flag")
+//    private boolean audioFlag;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name = "user_roles",

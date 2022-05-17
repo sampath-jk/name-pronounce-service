@@ -1,9 +1,11 @@
 package com.wf.hackathon.model;
 
+import com.wf.hackathon.entity.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Set;
 
 @Data
 @Builder
@@ -27,5 +29,8 @@ public class EmployeeResponse {
     private String telephone;
 
     private String email;
+
+    private Set<Role> roles;
+
 
 }
