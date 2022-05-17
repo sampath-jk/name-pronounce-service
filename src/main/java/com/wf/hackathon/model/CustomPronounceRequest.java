@@ -8,11 +8,12 @@ import javax.validation.constraints.NotBlank;
 public class CustomPronounceRequest {
 
     @NotBlank
+    private String employeeId;
+
+//    @NotBlank
     private String name;
     @NotBlank
     private String country;
-    @NotBlank
-    private String employeeId;
     @NotBlank
     private String speed;
     @NotBlank
