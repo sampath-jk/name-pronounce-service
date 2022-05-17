@@ -138,8 +138,8 @@ public class NamePronounceService {
     private String trimAudio(String audio) {
         log.debug("Before trim:"+ audio);
         log.debug("Length is:"+ "data:audio/wav;base64,".length());
-        log.debug("After trim:"+ audio.substring("data:audio/wav;base64,".length() - 1));    
-        return audio.substring("data:audio/wav;base64,".length() - 1);
+        log.debug("After trim:"+ audio.substring("data:audio/wav;base64,".length()));
+        return audio.substring("data:audio/wav;base64,".length());
         
     }
 
