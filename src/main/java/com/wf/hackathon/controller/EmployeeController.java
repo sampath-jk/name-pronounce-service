@@ -32,7 +32,9 @@ public class EmployeeController {
 
     @Operation(summary = "User registration", description = "Provides User registration")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Registration successful") })
+            @ApiResponse(responseCode = "200", description = "Registration successful"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "500", description = "Internal error")})
     @PostMapping("/register")
     public ResponseEntity<SuccessResponse> register(@Valid @RequestBody EmployeeSignupRequest loginRequest) {
         employeeService.register(loginRequest);
@@ -41,7 +43,10 @@ public class EmployeeController {
     }
     @Operation(summary = "Get employee details", description = "Provides information of a given employee by employee Id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Employee information") })
+            @ApiResponse(responseCode = "200", description = "Employee information"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal error")})
     @GetMapping("/getEmployee/{id}")
     public ResponseEntity<SuccessResponse> getEmployee(@PathVariable String id) {
         EmployeeResponse employee = employeeService.getEmployee(id);
@@ -50,7 +55,11 @@ public class EmployeeController {
     }
     @Operation(summary = "Employee search", description = "Provides employee name auto-suggest")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Employees matching requested name") })
+            @ApiResponse(responseCode = "200", description = "Employees matching requested name"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal error")
+    })
     @GetMapping("/employeeSearch/{name}")
     public ResponseEntity<SuccessResponse> employeeSearch(@PathVariable String name) {
         List<EmployeeResponse> searchResults = employeeService.searchEmployees(name);
@@ -59,7 +68,10 @@ public class EmployeeController {
     }
     @Operation(summary = "Get all employees", description = "Provides details of all employees")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Employee information provided successfully") })
+            @ApiResponse(responseCode = "200", description = "Employee information provided successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal error")
+    })
     @GetMapping("/getAllEmployees")
     public ResponseEntity<SuccessResponse> getAllEmployees() {
         List<EmployeeResponse> allEmployees = employeeService.getAllEmployees();
