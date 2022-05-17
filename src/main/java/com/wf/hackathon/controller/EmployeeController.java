@@ -30,7 +30,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @Operation(summary = "register", description = "Provides User registration")
+    @Operation(summary = "User registration", description = "Provides User registration")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Registration successful") })
     @PostMapping("/register")
@@ -39,7 +39,7 @@ public class EmployeeController {
         return new ResponseEntity(new SuccessResponse(200, "Success", "Hello"), HttpStatus.OK);
 
     }
-    @Operation(summary = "Get employee", description = "Provides employee information")
+    @Operation(summary = "Get employee details", description = "Provides information of a given employee by employee Id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Employee information") })
     @GetMapping("/getEmployee/{id}")
