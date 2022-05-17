@@ -7,6 +7,9 @@ import com.wf.hackathon.model.PronounceRequest;
 import com.wf.hackathon.model.SuccessResponse;
 import com.wf.hackathon.service.NamePronounceService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,25 +28,50 @@ public class NamePronounceController {
     public NamePronounceController(NamePronounceService namePronounceService) {
         this.namePronounceService = namePronounceService;
     }
-
+    @Operation(summary = "Name pronunciation", description = "Provides employee name standard/custom pronunciation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Employees name pronunciation received"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal error")})
     @PostMapping("/pronounceName")
     public ResponseEntity<SuccessResponse> pronounceName(@RequestBody PronounceRequest request) {
         Map<String, String> data = namePronounceService.pronounceName(request);
         return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
     }
 
+
+    @Operation(summary = "Custom Name pronunciation", description = "Provides employee name recording & custom pronunciation")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Employees name pronunciation received"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal error")})
     @PostMapping("/customPronounce")
     public ResponseEntity<SuccessResponse> customPronounce(@RequestBody CustomPronounceRequest request) {
         Map<String, String> data = namePronounceService.customPronounceNameTest(request);
         return new ResponseEntity(new SuccessResponse("Success", data), HttpStatus.OK);
     }
 
+    @Operation(summary = "Reset user recording", description = "Reset user pronunciation data")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Employees name pronunciation reset successful"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal error")})
     @GetMapping("/resetPronunciation/{employeeId}")
     public ResponseEntity<SuccessResponse> resetPronunciation(@PathVariable String employeeId) {
         Map<String, String> data = namePronounceService.resetPronunciation(employeeId);
         return new ResponseEntity(new SuccessResponse( "Success", data), HttpStatus.OK);
 
     }
+
+    @Operation(summary = "Save pronunciation recording", description = "Saves Name pronunciation recording")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Employees name pronunciation saved successfully"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "500", description = "Internal error")})
     @PostMapping("/savePronunciation")
     public ResponseEntity<SuccessResponse> savePronunciation(@RequestBody CustomPronounceRequest request) {
         namePronounceService.customPronounceName(request);
