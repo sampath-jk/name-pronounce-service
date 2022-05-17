@@ -96,11 +96,19 @@ public class NamePronounceService {
 
     public Map<String, String> customPronounceNameTest(CustomPronounceRequest request) {
         Map<String, String> response = new HashMap<>();
+        log.debug("Before Calling speech to speech");
+        try{
         SpeechToSpeechService service = new SpeechToSpeechService();
         String audio = service.getSpeech(request.getAudio(), request.getCountry(), request.getGender(),
                 request.getSpeed());
+                log.debug("Response Audio:"+audio);        
         response.put("employeeId", request.getEmployeeId());
         response.put("audio", "data:audio/wav;base64," + audio);
+        }catch(Exception e)
+        {
+            log.debug(e.getLocalizedMessage());
+            e.printStackTrace();
+        }
         return response;
     }
 
