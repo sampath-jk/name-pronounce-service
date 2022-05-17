@@ -64,7 +64,7 @@ public class NamePronounceService {
                 }
             } else if (StringUtils.isEmpty(request.getName())
                     && !request.getPreferredName().equals(employee.getPreferredName())) {
-                audio = service.getSpeech(request.getName(), request.getCountry());
+                audio = service.getSpeech(request.getPreferredName(), request.getCountry());
                 azureStorageService.uploadAudio(audio, request.getEmployeeId());
                 employee.setPreferredName(request.getPreferredName());
                 employee.setAudioFoundFlag("Y");
@@ -73,7 +73,7 @@ public class NamePronounceService {
             } else if (StringUtils.isEmpty(request.getName())
                     && request.getPreferredName().equals(employee.getPreferredName())
                     && (employee.getAudioFoundFlag() == null || employee.getAudioFoundFlag().equalsIgnoreCase("N"))) {
-                audio = service.getSpeech(request.getName(), request.getCountry());
+                audio = service.getSpeech(request.getPreferredName(), request.getCountry());
                 azureStorageService.uploadAudio(audio, request.getEmployeeId());
                 employee.setAudioFoundFlag("Y");
                 employeeRepo.save(employee);
