@@ -136,7 +136,9 @@ public class NamePronounceService {
     }
 
     private String trimAudio(String audio) {
+        log.debug(audio.substring("data:audio/wav;base64,".length() - 1));    
         return audio.substring("data:audio/wav;base64,".length() - 1);
+        
     }
 
 }
