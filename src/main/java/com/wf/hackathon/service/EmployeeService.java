@@ -57,9 +57,15 @@ public class EmployeeService {
         Set<Role> roles = new HashSet<>();
         //Need to change this logic
         strRoles.forEach(role -> {
-            Role adminRole = roleRepo.findByName(role)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
+            log.debug("Role Name:"+role);
+            // Role adminRole = roleRepo.findByName(role)
+                    // .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+             Role r = new Role();
+            r.setName(role);
+            r.setIsActive(true);
+            r.setRoleDescription(role.getValue());
+            roles.add(r);        
+            // roles.add(adminRole);
         });
         return roles;
     }
