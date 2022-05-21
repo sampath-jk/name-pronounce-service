@@ -58,14 +58,9 @@ public class EmployeeService {
         //Need to change this logic
         strRoles.forEach(role -> {
             log.debug("Role Name:"+role);
-            // Role adminRole = roleRepo.findByName(role)
-                    // .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-             Role r = new Role();
-            r.setName(role);
-            r.setIsActive(true);
-            r.setRoleDescription(role.getValue());
-            roles.add(r);        
-            // roles.add(adminRole);
+            Role adminRole = roleRepo.findByName(role)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(adminRole);
         });
         return roles;
     }
