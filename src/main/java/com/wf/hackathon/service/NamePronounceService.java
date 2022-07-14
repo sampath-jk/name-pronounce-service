@@ -35,7 +35,7 @@ public class NamePronounceService {
         String audio = null;
         TextToSpeechService service = new TextToSpeechService();
         try {
-            log.debug("Received response from AI service");
+            log.debug("Received response from AI service ");
             Employee employee = employeeRepo.findById(request.getEmployeeId())
                     .orElseThrow(() -> new UsernameNotFoundException(
                             "User Not Found with username: " + request.getEmployeeId()));
