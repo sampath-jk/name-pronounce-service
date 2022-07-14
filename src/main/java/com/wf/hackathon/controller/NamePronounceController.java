@@ -46,7 +46,7 @@ public class NamePronounceController {
 
     @Operation(summary = "Custom Name pronunciation", description = "Provides employee name recording & custom pronunciation")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Employees name pronunciation received"),
+            @ApiResponse(responseCode = "200", description = "Employees name pronunciation received."),
             @ApiResponse(responseCode = "400", description = "Bad request"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "500", description = "Internal error") })
